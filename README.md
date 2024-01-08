@@ -11,9 +11,13 @@ In your application class, add these lines,
     @Inject
     lateinit var interstitialAd: InterstitialAdManager
 
+    //create fun that will be called after getting user's consent
     fun initializeMobileAdsSdk(){
         MobileAds.initialize(this){}
         appOpenManager = AppOpenManager(this)
         interstitialAd.loadInterstitialAd()
     }
+```
+### 2.
+
 
