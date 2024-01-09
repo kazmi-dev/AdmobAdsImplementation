@@ -35,6 +35,14 @@ object DependencyInjectionAds {
     ): AppOpenAdsManager{
         return AppOpenAdsManager(context as BaseApplication)
     }
+
+    @Singleton
+    @Provides
+    fun providesBannerAdInstance(
+        @ApplicationContext context: Context
+    ): BannerAd{
+        return BannerAd(context)
+    }
     
     @Singleton
     @Provides
