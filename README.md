@@ -94,7 +94,7 @@ Inject the interstitial ads depedency implementation,
 ```
 Optional:
 ```
-  //using adPos,
+  //using adPos from AppSettings,
   if (adPos > 2){
     adPos = 0
     interstitialAdManager.showInterstitialAdIfAvailable(this@MainActivity)
