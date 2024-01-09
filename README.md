@@ -2,36 +2,42 @@
 Google Ad-mob Implementation. Kotlin || dagger-Hilt || Coroutines || MVVM
 
 ## Installation
+Below is the implementation of ads.
+
+### Download Ads folder.
 download ads folder and paste in your project.
 
-### 1.
-Import Google Native Template as a module.
-
-### 2.
-In your application class, add these lines,
+### Initialize Admob 
+In your onCreate() method of your Application class add this line:
 ```
-    var appOpenManager: AppOpenManager? = null
-    @Inject
-    lateinit var interstitialAd: InterstitialAdManager
-
-    //create fun that will be called after getting user's consent
-    fun initializeMobileAdsSdk(){
-        MobileAds.initialize(this){}
-        appOpenManager = AppOpenManager(this)
-        interstitialAd.loadInterstitialAd()
-    }
+MobileAds.initialize(this){}
 ```
 
-### 3.
+### AppOpen Ad.
+AppOpen ad Implementation:
+
+#### Initialization
+In your Activity or Fragment, add these lines,
+```
+//just inject the appOpen impl
+@Inject
+lateinit var appOpenAdsManager: AppOpenAdsManager
+```
+
+##### Usage with both Native and AppOpen ads.
 If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fragment or Activity and override methods:
 ```
-
     class SomeFragment : Fragment(), AppOpen
                     OR
     class SomeActivity : Activity(), AppOpen
+
+    //In onCreate() method of Activity or Fragment,
+    
     ....
     //remaning code
+    ....
 
+    //hide your native ad while showing appOpen and restore on close (best practice).
     override fun closeAds() {
         binding.nativeAdView.visibility = View.INVISIBLE
     }
@@ -41,5 +47,5 @@ If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fra
     }
 ```
 
-### 4.
-
+### Native Template for Native Ads.
+Import Google Native Template as a module.
