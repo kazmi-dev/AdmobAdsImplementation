@@ -14,7 +14,6 @@ MobileAds.initialize(this){}
 ```
 
 ### AppOpen Ad.
-AppOpen ad Implementation:
 
 #### Initialization
 In your Activity or Fragment, add these lines,
@@ -38,13 +37,47 @@ If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fra
     //hide your native ad while showing appOpen and restore on close (best practice).
 
     override fun closeAds() {
+        // if using binding
         binding.nativeAdView.visibility = View.INVISIBLE
+
+        //if using view
+        nativeView.visibility = View.INVISIBLE
     }
 
     override fun restoreAds() {
+        // if using binding
         binding.nativeAdView.visibility = View.VISIBLE
+
+        //if using view
+        nativeView.visibility = View.VISIBLE
     }
 ```
 
-### Native Template for Native Ads.
+### Native Ads.
+
+#### Native Template for Native Ads
 Import Google Native Template as a module.
+
+#### Installation
+Inject the native ads depedency implementation,
+```
+  @Inject
+  lateinit var nativeAdManager: NativeAdManager
+
+  ...
+  remaining code
+  ...
+  //if using view
+  nativeAdManager.initNativeAd(templateView)
+
+  // if using binding
+  nativeAdManager.initNativeAd(binding.templateView)
+```
+
+### Interstitial Ads
+
+#### Installation
+
+
+
+
