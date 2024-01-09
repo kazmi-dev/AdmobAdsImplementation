@@ -27,15 +27,15 @@ lateinit var appOpenAdsManager: AppOpenAdsManager
 ##### Usage with both Native and AppOpen ads.
 If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fragment or Activity and override methods:
 
-    class SomeFragment : Fragment(), AppOpen
-                    OR
-    class SomeActivity : Activity(), AppOpen
+class SomeFragment : Fragment(), AppOpen
+                 OR
+class SomeActivity : Activity(), AppOpen
     
-    ....
-    //remaning code
-    ....
+....
+//remaning code
+....
     
-``` start here
+```
     //hide your native ad while showing appOpen and restore on close (best practice).
 
     override fun closeAds() {
