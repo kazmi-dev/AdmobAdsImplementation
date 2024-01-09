@@ -85,7 +85,7 @@ If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fra
 Import Google Native Template as a module.
 
 #### Installation
-In your Activit's or Fragment's layout file add:
+In your Activity's or Fragment's layout file add:
 ```
  <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/native_ad_container"
@@ -167,5 +167,15 @@ Optional:
 ```
 
 ### Banner Ad
+In your Activity or Fragment,
+```
+ //Inject banner ad depedency
+ @Inject
+ latinit var bannerAd: BannerAd
 
+ ...
+ remaining code
+ ...
+
+ bannerAd.loadAndShowBannerAd(isAnchored = false, biniding.bannerAdView))
 
