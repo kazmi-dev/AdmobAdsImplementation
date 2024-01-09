@@ -7,10 +7,36 @@ Below is the implementation of ads.
 ### Download Ads folder.
 download ads folder and paste in your project.
 
-### Initialize Admob 
-In your onCreate() method of your Application class add this line:
+### Google Consent Form
+From Jan, 15 2024 you must take user's consent for personalized ads.
+In your Application class, add this fun:
 ```
-MobileAds.initialize(this){}
+ fun initializeAdmobSdk(){
+    MobileAds.initialize(this){}
+}
+```
+
+### Taking User's Consent Form
+In your Splash Activity or Fragment, add these lines
+```
+  @Inject
+  lateinit var googleMobileAdsConsentManager: GoogleMobileAdsConsentManager
+```
+In onCreate() method of your Activity or Fragment
+```
+googleMobileAdsConsentManager.gatherConsent(this) { consentError ->
+  if (consentError != null) {
+    Log.d("consentError87654", String.format("%s: %s", consentError.errorCode, consentError.message))
+  }
+
+  if (googleMobileAdsConsentManager.canRequestAds) {
+    //For Activity
+    (applicationContext as BaseApplication).initializeAdmobSdk()
+
+    //For Fragment
+    (requireActivity() as BaseApplication).initializeAdmobSdk()
+  }
+}
 ```
 
 ### AppOpen Ad.
@@ -18,7 +44,7 @@ MobileAds.initialize(this){}
 #### Initialization
 In your Activity or Fragment, add these lines,
 ```
-//just inject the appOpen impl
+//Inject the appOpen impl
 @Inject
 lateinit var appOpenAdsManager: AppOpenAdsManager
 ```
