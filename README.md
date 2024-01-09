@@ -167,6 +167,18 @@ Optional:
 ```
 
 ### Banner Ad
+In your Activity's or Fragment's layout file add:
+```
+ <com.google.android.gms.ads.AdView
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/adView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_alignParentBottom="true"
+    ads:adSize="BANNER">
+ </com.google.android.gms.ads.AdView>
+```
 In your Activity or Fragment,
 ```
  //Inject banner ad depedency
@@ -177,5 +189,8 @@ In your Activity or Fragment,
  remaining code
  ...
 
- bannerAd.loadAndShowBannerAd(isAnchored = false, biniding.bannerAdView))
+ // loadAndShowBannerAd takes two parameter, isAnchored : Boolean and bannerAdView: FrameLayout
+ bannerAd.loadAndShowBannerAd(isAnchored = false, bannerAdView = binding.bannerAdView))
+```
+
 
