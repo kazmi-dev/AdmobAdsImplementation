@@ -30,6 +30,14 @@ object DependencyInjectionAds {
 
     @Singleton
     @Provides
+    fun providesAppOpenAdInstance(
+        @ApplicationContext context: Context
+    ): AppOpenAdsManager{
+        return AppOpenAdsManager(context as BaseApplication)
+    }
+    
+    @Singleton
+    @Provides
     fun providesGoogleMobileAdsConsentManagerInstance(
         @ApplicationContext context: Context
     ): GoogleMobileAdsConsentManager{
