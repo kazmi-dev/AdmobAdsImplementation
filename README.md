@@ -67,7 +67,7 @@ If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fra
         binding.nativeAdView.visibility = View.INVISIBLE
 
         //if using view
-        nativeView.visibility = View.INVISIBLE
+        nativeAdView.visibility = View.INVISIBLE
     }
 
     override fun restoreAds() {
@@ -75,7 +75,7 @@ If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fra
         binding.nativeAdView.visibility = View.VISIBLE
 
         //if using view
-        nativeView.visibility = View.VISIBLE
+        nativeAdView.visibility = View.VISIBLE
     }
 ```
 
@@ -85,7 +85,44 @@ If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fra
 Import Google Native Template as a module.
 
 #### Installation
-Inject the native ads depedency implementation,
+In your Activit's or Fragment's layout file add:
+```
+ <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/native_ad_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/ad_template"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include layout="@layout/native_ad_loading_small" />
+        </LinearLayout>
+
+        <com.google.android.ads.nativetemplates.TemplateView
+            android:id="@+id/native_ad_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="3dp"
+            android:visibility="invisible"
+            app:gnt_template_type="@layout/gnt_small_template_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+```
+Inject the native ads implementation depedency,
 ```
   @Inject
   lateinit var nativeAdManager: NativeAdManager
@@ -94,10 +131,10 @@ Inject the native ads depedency implementation,
   remaining code
   ...
   //if using view
-  nativeAdManager.initNativeAd(templateView)
+  nativeAdManager.initNativeAd(nativeAdView)
 
   // if using binding
-  nativeAdManager.initNativeAd(binding.templateView)
+  nativeAdManager.initNativeAd(binding.nativeAdView)
 ```
 
 ### Interstitial Ads
