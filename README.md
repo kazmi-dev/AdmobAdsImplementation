@@ -34,6 +34,7 @@ If you use both Native and AppOpen Ads, than use "AppOpen" interface in your fra
     ....
     //remaning code
     ....
+    
 ```
     //hide your native ad while showing appOpen and restore on close (best practice).
 
