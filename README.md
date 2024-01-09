@@ -77,7 +77,32 @@ Inject the native ads depedency implementation,
 ### Interstitial Ads
 
 #### Installation
+Inject the interstitial ads depedency implementation,
+```
+  @Inject
+  lateinit var interstitialAdManager: InterstitialAdManager
 
+  ...
+  remaining code
+  ...
 
+  //for activity
+  interstitialAdManager.showInterstitialAdIfAvailable(this@MainActivity)
+
+  //for fragment
+  interstitialAdManager.showInterstitialAdIfAvailable(requireActivity())
+```
+Optional:
+```
+  //using adPos,
+  if (adPos > 2){
+    adPos = 0
+    interstitialAdManager.showInterstitialAdIfAvailable(this@MainActivity)
+  }else{
+    adPos++
+  }
+```
+
+### Banner Ad
 
 
