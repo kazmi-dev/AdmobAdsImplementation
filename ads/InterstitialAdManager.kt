@@ -22,28 +22,24 @@ class InterstitialAdManager(private val context: Context) {
     private var interstitialAd: InterstitialAd? = null
 
     /** load Interstitial Ad */
-    fun loadInterstitialAd() {
+    private fun loadInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
             context,
             context.getString(R.string.interstitial_ad_id),
             adRequest,
-            interstitialAdLoadCallback
+            object : InterstitialAdLoadCallback(){
+                override fun onAdLoaded(ad: InterstitialAd) {
+                    Log.d(interstitialAdLog, "Ad Loaded")
+                    interstitialAd = ad
+                }
+
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    Log.d(interstitialAdLog, "Ad Failed to Load")
+                    interstitialAd = null
+                }
+            }
         )
-    }
-
-    private val interstitialAdLoadCallback = object : InterstitialAdLoadCallback() {
-
-        override fun onAdLoaded(ad: InterstitialAd) {
-            Log.d(interstitialAdLog, "Ad Loaded")
-            interstitialAd = ad
-        }
-
-        override fun onAdFailedToLoad(error: LoadAdError) {
-            Log.d(interstitialAdLog, "Ad Failed to Load")
-            interstitialAd = null
-        }
-
     }
 
     /** Show Ad if Available */
