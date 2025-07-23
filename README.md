@@ -148,5 +148,30 @@ setAdVisibilityController(adVisibilityController: AdVisibilityController)
 ### 3. Show Ads
 If on demand is set `true` than Ad will be loaded and than showd otherwise ad will be preloaded and will be shown instantly
 
+## Native ads
+
+### 1. Initialization:
+
+``` initialize
+@Inject lateinit var nativeAdmanager: NativeAdManager
+```
+
+### 2. Show Native Ad:
+This function loads and immediately displays a native ad inside the given container without requiring any preload setup. It’s perfect for screens where you need to show a native ad on-the-fly with minimal code.
+
+```show ad
+fun showNativeAdOnDemand(
+    adUnitId: String,
+    nativeAdContainer: FrameLayout,
+    adSize: NativeTemplate = NativeTemplate.MEDIUM
+)
+```
+| Parameter           | Type             | Required | Description                                                                |
+| ------------------- | ---------------- | -------- | -------------------------------------------------------------------------- |
+| `adUnitId`          | `String`         | ✅ Yes    | Your **Native Ad Unit ID** from AdMob (test or production).                |
+| `nativeAdContainer` | `FrameLayout`    | ✅ Yes    | The container where the native ad view will be displayed.                  |
+| `adSize`            | `NativeTemplate` | ❌ No     | Enum defining the layout size/style of the native ad. Default is `MEDIUM`. |
+
+
 
 
