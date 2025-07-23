@@ -20,16 +20,28 @@ Supports:
 @Inject lateinit var bannerAdManager: BannerAdManager
 ```
 ### Single Banner Ad:
+Use this function to dynamically load and display a Banner Ad inside a container (e.g., FrameLayout), with optional loading text and collapsibility settings.
 
 ```Single ad show
 bannerAdManager.loadAndShowAd(
-                activity = requireActivity(),
-                adUnitId = "Your Ad Unit ID",
-                adViewContainer = Your ViewContainer(FrameLayout),
-                loadingView = Lyour Loading View(textView) nullable,
-                isCollapsible = false (default),
-                isCollapsibleAtBottom = false (default)
-            )
+    activity = requireActivity(),
+    adUnitId = "Your Ad Unit ID",
+    adViewContainer = yourViewContainer,          // FrameLayout or ViewGroup
+    loadingView = yourLoadingTextView,            // Optional TextView for "Loading Ad..."
+    isCollapsible = false,                        // Optional, default: false
+    isCollapsibleAtBottom = false                 // Optional, default: false
+)
 ```
+| Parameter               | Type        | Required | Description                                                                                                 |
+| ----------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `activity`              | `Activity`  | ✅ Yes    | Your current `Activity` (or `requireActivity()` inside Fragment). Used for context.                         |
+| `adUnitId`              | `String`    | ✅ Yes    | Your **Banner Ad Unit ID** from AdMob (test or production).                                                 |
+| `adViewContainer`       | `ViewGroup` | ✅ Yes    | The layout container where the banner ad will be injected. Usually a `FrameLayout`.                         |
+| `loadingView`           | `TextView?` | ❌ No     | Optional loading text (e.g., "Loading Ad..."). It will be shown until the ad is loaded.                     |
+| `isCollapsible`         | `Boolean`   | ❌ No     | If true, the banner will be collapsible (expand/collapse animation). Default is `false`.                    |
+| `isCollapsibleAtBottom` | `Boolean`   | ❌ No     | If `isCollapsible` is `true`, setting this to `true` will collapse from the **bottom**. Default is `false`. |
+
+### Preloading Banner Ads:
+
 
 
