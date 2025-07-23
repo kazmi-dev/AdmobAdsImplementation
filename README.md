@@ -63,6 +63,12 @@ bannerAdManager.showBannerAd(
 
 ## 🔧 Interstitial Ads
 
+### Initialization:
+
+```Initialization
+@Inject lateinit var interstitialADManager: InterstitialAdManager
+```
+
 ### Show Ads on demand:
 This function loads and immediately shows an interstitial ad at runtime. It's designed for on-the-spot ad display without preloading.
 
@@ -97,6 +103,12 @@ fun showAdIfAvailable(
 
 
 ## 🔧 App Open Ads
+
+### Initialization:
+
+```Initialization
+@Inject lateinit var appOpenAdManager: AppOpenAdManager
+```
 
 ### Show Ads on demand:
 
