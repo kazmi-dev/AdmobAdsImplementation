@@ -156,7 +156,10 @@ If on demand is set `true` than Ad will be loaded and than showd otherwise ad wi
 @Inject lateinit var nativeAdmanager: NativeAdManager
 ```
 
-### 2. Show Native Ad:
+### 2. Copy required `layouts` and `drawables` in your project:
+Copy the layouts and drawables in your projects resource folder so that it will be avaialble to the `NativeAdManager` class.
+
+### 3. Show Native Ad:
 This function loads and immediately displays a native ad inside the given container without requiring any preload setup. It’s perfect for screens where you need to show a native ad on-the-fly with minimal code.
 
 ```show ad
