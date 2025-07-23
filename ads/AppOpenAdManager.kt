@@ -1,5 +1,3 @@
-package com.kazmi.dev.ads.google.utils
-
 import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
 import android.content.Context
