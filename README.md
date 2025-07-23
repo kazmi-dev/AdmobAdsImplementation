@@ -63,3 +63,40 @@ bannerAdManager.showBannerAd(
 
 ## 🔧 Interstitial Ads
 
+### Show Ads on demand:
+This function loads and immediately shows an interstitial ad at runtime. It's designed for on-the-spot ad display without preloading.
+
+```show on demand ad
+fun showAdOnDemand(
+    activity: Activity,
+    adUnitId: String,
+    callback: (AdState) -> Unit
+)
+```
+
+| Parameter  | Type                | Required | Description                                                                                    |
+| ---------- | ------------------- | -------- | ---------------------------------------------------------------------------------------------- |
+| `activity` | `Activity`          | ✅ Yes    | The current activity context used to display the ad.                                           |
+| `adUnitId` | `String`            | ✅ Yes    | Your **Interstitial Ad Unit ID** from AdMob.                                                   |
+| `callback` | `(AdState) -> Unit` | ✅ Yes    | Lambda callback that provides ad state results. It must handle one of the `AdState` responses. |
+
+### Show Ads by preloading:
+This function shows a previously preloaded interstitial ad if it's ready. It’s ideal when you’ve already loaded an ad and want to display it only if available, avoiding unnecessary reloads or errors.
+
+```preloaded ads
+fun showAdIfAvailable(
+    activity: Activity,
+    callback: (AdState) -> Unit
+)
+```
+
+| Parameter  | Type                | Required | Description                                                                    |
+| ---------- | ------------------- | -------- | ------------------------------------------------------------------------------ |
+| `activity` | `Activity`          | ✅ Yes    | The current activity used to show the interstitial ad.                         |
+| `callback` | `(AdState) -> Unit` | ✅ Yes    | Lambda function that returns the ad display state (Loaded, Closed, or Failed). |
+
+
+## 🔧 App Open Ads
+
+### Show Ads on demand:
+
