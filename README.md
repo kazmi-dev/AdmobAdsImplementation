@@ -14,12 +14,12 @@ Supports:
 
 ## 🔧 Banner and Collapsible Banner Ads
 
-# Copy `BannerAdManager.kt` class in your code and initialize it as below:
+### Copy `BannerAdManager.kt` class in your code and initialize it as below:
 
 ```Initialization
 @Inject lateinit var bannerAdManager: BannerAdManager
 ```
-# Single Banner Ad:
+### Single Banner Ad:
 
 ```Single ad show
 bannerAdManager.loadAndShowAd(
