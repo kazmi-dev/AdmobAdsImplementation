@@ -29,7 +29,7 @@ bannerAdManager.loadAndShowAd(
     adViewContainer = yourViewContainer,          // FrameLayout or ViewGroup
     loadingView = yourLoadingTextView,            // Optional TextView for "Loading Ad..."
     isCollapsible = false,                        // Optional, default: false
-    isCollapsibleAtBottom = false                 // Optional, default: false
+    isCollapsibleAtBottom = true                  // Optional, default: true
 )
 ```
 | Parameter               | Type        | Required | Description                                                                                                 |
