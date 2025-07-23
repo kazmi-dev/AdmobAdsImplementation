@@ -14,12 +14,12 @@ Supports:
 
 ## 🔧 Banner and Collapsible Banner Ads
 
-### Initialization:
+### 1.Initialization:
 
 ```Initialization
 @Inject lateinit var bannerAdManager: BannerAdManager
 ```
-### Single Banner Ad:
+### 2.Single Banner Ad:
 Use this function to dynamically load and display a Banner Ad inside a container (e.g., FrameLayout), with optional loading text and collapsibility settings.
 
 ```Single ad show
@@ -41,7 +41,7 @@ bannerAdManager.loadAndShowAd(
 | `isCollapsible`         | `Boolean`   | ❌ No     | If true, the banner will be collapsible (expand/collapse animation). Default is `false`.                    |
 | `isCollapsibleAtBottom` | `Boolean`   | ❌ No     | If `isCollapsible` is `true`, setting this to `true` will collapse from the **bottom**. Default is `true`. |
 
-### Preloading Banner Ads:
+### 3.Preloading Banner Ads:
 This function preloads multiple banner ads into memory so they’re ready to display when needed (useful for ViewPagers, RecyclerViews, or dynamic sections in your app).
 
 ```preloading ads
@@ -63,13 +63,13 @@ bannerAdManager.showBannerAd(
 
 ## 🔧 Interstitial Ads
 
-### Initialization:
+### 1.Initialization:
 
 ```Initialization
 @Inject lateinit var interstitialADManager: InterstitialAdManager
 ```
 
-### Show Ads on demand:
+### 2.Show Ads on demand:
 This function loads and immediately shows an interstitial ad at runtime. It's designed for on-the-spot ad display without preloading.
 
 ```show on demand ad
@@ -86,7 +86,7 @@ fun showAdOnDemand(
 | `adUnitId` | `String`            | ✅ Yes    | Your **Interstitial Ad Unit ID** from AdMob.                                                   |
 | `callback` | `(AdState) -> Unit` | ✅ Yes    | Lambda callback that provides ad state results. It must handle one of the `AdState` responses. |
 
-### Show Ads by preloading:
+### 3.Show Ads by preloading:
 This function shows a previously preloaded interstitial ad if it's ready. It’s ideal when you’ve already loaded an ad and want to display it only if available, avoiding unnecessary reloads or errors.
 
 ```preloaded ads
@@ -104,11 +104,46 @@ fun showAdIfAvailable(
 
 ## 🔧 App Open Ads
 
-### Initialization:
+### 1.Initialization:
 
 ```Initialization
 @Inject lateinit var appOpenAdManager: AppOpenAdManager
 ```
+### 2.Set before showing:
 
-### Show Ads on demand:
+#### 1.Set if preloading:
+Sets whether the interstitial ad should be shown on demand or only if preloaded.
+
+```set preload
+setShowAdOnDemand(isShowAdOnDemand: Boolean)
+```
+
+| Name               | Type      | Description                                                                                                                                           |
+| ------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `isShowAdOnDemand` | `Boolean` | If `true`, the ad will be loaded and shown immediately using `showAdOnDemand()`. If `false`, only preloaded ads will be used (`showAdIfAvailable()`). |
+
+#### 2.Set ad unit id:
+Sets a global interstitial ad unit ID, so you don’t need to pass it every time to loadAd() or showAdOnDemand().
+
+``` adunit id
+setAdUnitId(adUnitId: String)
+```
+
+| Name       | Type     | Description                         |
+| ---------- | -------- | ----------------------------------- |
+| `adUnitId` | `String` | Your AdMob interstitial ad unit ID. |
+
+#### 3.Set ad visibility controller:
+Sets a controller to hide or restore your app’s UI elements when the ad appears or disappears. Helpful for removing sensitive or interactive UI during ads.
+
+```set visibility
+setAdVisibilityController(adVisibilityController: AdVisibilityController)
+```
+
+| Name                     | Type                     | Description                                                        |
+| ------------------------ | ------------------------ | ------------------------------------------------------------------ |
+| `adVisibilityController` | `AdVisibilityController` | Interface instance to control your app's UI visibility during ads. |
+
+### 3.Show Ads on demand:
+
 
