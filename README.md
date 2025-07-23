@@ -26,10 +26,10 @@ Use this function to dynamically load and display a Banner Ad inside a container
 bannerAdManager.loadAndShowAd(
     activity = requireActivity(),
     adUnitId = "Your Ad Unit ID",
-    adViewContainer = yourViewContainer,          // FrameLayout or ViewGroup
-    loadingView = yourLoadingTextView,            // Optional TextView for "Loading Ad..."
-    isCollapsible = false,                        // Optional, default: false
-    isCollapsibleAtBottom = true                  // Optional, default: true
+    adViewContainer = yourViewContainer,         
+    loadingView = yourLoadingTextView,           
+    isCollapsible = false,                        
+    isCollapsibleAtBottom = true                  
 )
 ```
 | Parameter               | Type        | Required | Description                                                                                                 |
@@ -46,9 +46,9 @@ This function preloads multiple banner ads into memory so they’re ready to dis
 
 ```preloading ads
 bannerAdManager.getPreBannerAds(
-    count = your required ads coun          //total ads required
-    activity = requireActivity(),           //activity
-    adUnitId = "Your Ad Unit ID"            //your ad unit id
+    count = your required ads coun        
+    activity = requireActivity(),          
+    adUnitId = "Your Ad Unit ID"           
 )
 bannerAdManager.showBannerAd(
     requireActivity(),
