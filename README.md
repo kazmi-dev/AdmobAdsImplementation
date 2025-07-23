@@ -42,6 +42,24 @@ bannerAdManager.loadAndShowAd(
 | `isCollapsibleAtBottom` | `Boolean`   | ❌ No     | If `isCollapsible` is `true`, setting this to `true` will collapse from the **bottom**. Default is `true`. |
 
 ### Preloading Banner Ads:
+This function preloads multiple banner ads into memory so they’re ready to display when needed (useful for ViewPagers, RecyclerViews, or dynamic sections in your app).
 
+```preloading ads
+bannerAdManager.getPreBannerAds(
+    count = your required ads coun          //total ads required
+    activity = requireActivity(),           //activity
+    adUnitId = "Your Ad Unit ID"            //your ad unit id
+)
+bannerAdManager.showBannerAd(
+    requireActivity(),
+    binding.bannerAdViewContainer
+)
+```
+| Parameter  | Type       | Required | Description                                                               |
+| ---------- | ---------- | -------- | ------------------------------------------------------------------------- |
+| `count`    | `Int`      | ✅ Yes    | Number of banner ads to preload.                                          |
+| `activity` | `Activity` | ✅ Yes    | Activity context used by AdMob SDK. Use `requireActivity()` in fragments. |
+| `adUnitId` | `String`   | ✅ Yes    | Your **Banner Ad Unit ID** (from AdMob) used to request ads.              |
 
+## 🔧 Interstitial Ads
 
