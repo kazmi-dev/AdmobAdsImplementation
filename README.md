@@ -14,7 +14,7 @@ Supports:
 
 ## 🔧 Banner and Collapsible Banner Ads
 
-### Copy `BannerAdManager.kt` class in your code and initialize it as below:
+### Initialization:
 
 ```Initialization
 @Inject lateinit var bannerAdManager: BannerAdManager
