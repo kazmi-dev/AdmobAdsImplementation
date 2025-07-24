@@ -233,6 +233,64 @@ fun showAdIfAvailable(
 | `adUnitId` | `String`                     | ✅ Yes    | Your **Rewarded Ad Unit ID** from AdMob.                  |
 | `callback` | `(RewardAdCallback) -> Unit` | ✅ Yes    | Lambda callback for handling ad states and reward events. |
 
+## Rewarded Interstitial Ads
+
+### 1. Initialization:
+
+``` initialize
+@Inject lateinit var rewardedInterstitialAdManager: RewardedInterstitialAdManager
+```
+
+### 2. Show Ad on demand:
+This function loads and immediately shows a Rewarded Interstitial Ad, which is a type of rewarded ad that doesn’t require explicit user opt-in (e.g., clicking a button). It combines the reach of interstitial ads with the reward mechanics of rewarded ads.
+
+```load and show
+fun loadAndShowAd(
+    activity: Activity,
+    adUnitId: String,
+    callback: (adState: RewardInterstitialAdCallback) -> Unit
+)
+```
+
+| Parameter  | Type                                     | Required | Description                                            |
+| ---------- | ---------------------------------------- | -------- | ------------------------------------------------------ |
+| `activity` | `Activity`                               | ✅ Yes    | The current activity where the ad should be displayed. |
+| `adUnitId` | `String`                                 | ✅ Yes    | Your **Rewarded Interstitial Ad Unit ID** from AdMob.  |
+| `callback` | `(RewardInterstitialAdCallback) -> Unit` | ✅ Yes    | Callback to handle ad events and reward state.         |
+
+### 3. Pre load ad:
+This function allows you to load a Rewarded Interstitial Ad in advance. Once preloaded, you can later display it using showAdIfAvailable() for a smooth, delay-free user experience.
+
+#### 1. Preload Ad:
+
+```preload ad
+fun preLoadAd(
+    adUnitId: String,
+    onLoaded: () -> Unit
+)
+```
+
+| Parameter  | Type         | Required | Description                                                       |
+| ---------- | ------------ | -------- | ----------------------------------------------------------------- |
+| `adUnitId` | `String`     | ✅ Yes    | Your **Rewarded Interstitial Ad Unit ID** from AdMob.             |
+| `onLoaded` | `() -> Unit` | ✅ Yes    | Lambda called only when the ad is successfully loaded and cached. |
+
+#### 2. Show Ad:
+
+```show ad
+fun showAdIfAvailable(
+    activity: Activity,
+    adUnitId: String,
+    callback: (adState: RewardInterstitialAdCallback) -> Unit
+)
+```
+
+| Parameter  | Type                                     | Required | Description                                                           |
+| ---------- | ---------------------------------------- | -------- | --------------------------------------------------------------------- |
+| `activity` | `Activity`                               | ✅ Yes    | The current activity used to show the ad.                             |
+| `adUnitId` | `String`                                 | ✅ Yes    | The same **Rewarded Interstitial Ad Unit ID** used during preloading. |
+| `callback` | `(RewardInterstitialAdCallback) -> Unit` | ✅ Yes    | Callback to listen for ad status and rewards.                         |
+
 
 
 
