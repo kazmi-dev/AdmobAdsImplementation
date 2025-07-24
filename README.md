@@ -44,14 +44,14 @@ daggerHilt_version = "2.55"
 ksp_version = "2.1.0-1.0.29"
 ```
 
-### 📌 2. Annotate Your Application Class
+#### 📌 2. Annotate Your Application Class
 
 ```anotate
 @HiltAndroidApp
 class MyApp : Application()
 ```
 
-### 📌 3. Update Manifest file
+#### 📌 3. Update Manifest file
 
 ```update
 <application
