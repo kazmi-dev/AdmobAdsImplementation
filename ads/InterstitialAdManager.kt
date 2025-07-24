@@ -21,15 +21,10 @@ class InterstitialAdManager @Inject constructor(
     }
 
     private var interstitialAd: InterstitialAd? = null
-    private var adUnitId: String = "ca-app-pub-3940256099942544/1033173712"
     private var isAdLoading: Boolean = false
     private var isAdShowing: Boolean = false
 
-    fun setAdUnitId(adUnitId: String) {
-        this.adUnitId = adUnitId
-    }
-
-    fun preloadAd() {
+    fun preloadAd(adUnitId: String) {
 
         //check if ad already available
         if (interstitialAd != null) {
@@ -44,16 +39,18 @@ class InterstitialAdManager @Inject constructor(
         }
 
         //loadAd
-        loadAd(adUnitId) { Log.d(INTERSTITIAL_LOG, "preloadAd: Ad loaded") }
+        loadAd(adUnitId) {
+            Log.d(INTERSTITIAL_LOG, "preloadAd: Ad loaded")
+        }
 
     }
 
-    fun showAdIfAvailable(activity: Activity, callback: (InterstitialAdCallback)-> Unit) {
+    fun showAdIfAvailable(activity: Activity, adUnitId: String,  callback: (InterstitialAdCallback)-> Unit) {
 
         //check if ad is not available to show
         if (interstitialAd == null) {
             Log.d(INTERSTITIAL_LOG, "showAdIfAvailable: Ad not available, preloading ad")
-            preloadAd()
+            preloadAd(adUnitId)
             callback.invoke(InterstitialAdCallback.FAILED_TO_SHOW)
             return
         }
@@ -65,7 +62,7 @@ class InterstitialAdManager @Inject constructor(
         }
 
         //show ad
-        showAd(activity, isPreloadAfterDismiss = true, callback)
+        showAd(activity, adUnitId, isPreloadAfterDismiss = true, callback)
 
     }
 
@@ -81,7 +78,7 @@ class InterstitialAdManager @Inject constructor(
         if (interstitialAd == null) {
             loadAd(adUnitId) {
                 //show ad
-                attachFullscreenCallback(isPreloadAfterDismiss = false, callback = callback)
+                attachFullscreenCallback(adUnitId, isPreloadAfterDismiss = false, callback = callback)
                 isAdShowing = true
                 interstitialAd?.show(activity)
             }
@@ -89,7 +86,7 @@ class InterstitialAdManager @Inject constructor(
         }
 
         //show ad
-        showAd(activity, isPreloadAfterDismiss = false, callback)
+        showAd(activity, adUnitId, isPreloadAfterDismiss = false, callback)
 
     }
 
@@ -118,13 +115,14 @@ class InterstitialAdManager @Inject constructor(
         )
     }
 
-    private fun showAd(activity: Activity, isPreloadAfterDismiss: Boolean, callback: (InterstitialAdCallback)-> Unit) {
-        attachFullscreenCallback(isPreloadAfterDismiss, callback)
+    private fun showAd(activity: Activity, adUnitId: String, isPreloadAfterDismiss: Boolean, callback: (InterstitialAdCallback)-> Unit) {
+        attachFullscreenCallback(adUnitId, isPreloadAfterDismiss, callback)
         isAdShowing = true
         interstitialAd?.show(activity)
     }
 
     private fun attachFullscreenCallback(
+        adUnitId: String,
         isPreloadAfterDismiss: Boolean,
         callback: (InterstitialAdCallback) -> Unit
     ) {
@@ -143,7 +141,7 @@ class InterstitialAdManager @Inject constructor(
                 )
                 interstitialAd = null
                 isAdShowing = false
-                if (isPreloadAfterDismiss) preloadAd()
+                if (isPreloadAfterDismiss) preloadAd(adUnitId)
                 callback.invoke(InterstitialAdCallback.DISMISSED)
             }
 
@@ -158,7 +156,7 @@ class InterstitialAdManager @Inject constructor(
             }
         }
     }
-    
+
     enum class InterstitialAdCallback{
         FAILED_TO_SHOW, SHOWED, DISMISSED
     }
