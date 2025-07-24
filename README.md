@@ -101,6 +101,15 @@ fun showAdIfAvailable(
 | `activity` | `Activity`          | ✅ Yes    | The current activity used to show the interstitial ad.                         |
 | `callback` | `(AdState) -> Unit` | ✅ Yes    | Lambda function that returns the ad display state (Loaded, Closed, or Failed). |
 
+#### Example:
+
+```example
+InterstitialAdManager.preLoadAd(
+    adUnitId = getString(R.string.interstitial_ad_unit_id)
+) {
+    Log.d("Ad", "Ad successfully preloaded.")
+}
+```
 
 ## 🔧 App Open Ads
 
@@ -217,6 +226,16 @@ fun preLoadAd(
 | `adUnitId` | `String`     | ✅ Yes    | Your **Interstitial Ad Unit ID** from AdMob.                    |
 | `onLoaded` | `() -> Unit` | ✅ Yes    | Callback triggered **only when the ad is successfully loaded**. |
 
+#### Example:
+
+```example
+rewardInterstitialManager.preLoadAd(
+    adUnitId = getString(R.string.reward_interstitial_ad_unit_id)
+){
+    // on ad loaded
+}
+```
+
 #### 2. Show Ad:
 
 ```show ad
@@ -232,6 +251,31 @@ fun showAdIfAvailable(
 | `activity` | `Activity`                   | ✅ Yes    | The current activity used to display the ad.              |
 | `adUnitId` | `String`                     | ✅ Yes    | Your **Rewarded Ad Unit ID** from AdMob.                  |
 | `callback` | `(RewardAdCallback) -> Unit` | ✅ Yes    | Lambda callback for handling ad states and reward events. |
+
+#### Example:
+
+```example
+rewardedAdManager.showAdIfAvailable(
+    activity = this,
+    adUnitId = getString(R.string.rewarded_ad_unit_id)
+) { adState ->
+    when (adState) {
+        is RewardAdCallback.Loaded -> {
+            Log.d("Ad", "Rewarded ad shown.")
+        }
+        is RewardAdCallback.Closed -> {
+            Log.d("Ad", "User closed the ad.")
+        }
+        is RewardAdCallback.Failed -> {
+            Log.e("Ad", "No ad available to show.")
+        }
+        is RewardAdCallback.RewardEarned -> {
+            Log.d("Ad", "User earned ${adState.amount} ${adState.type}")
+            // Grant reward here
+        }
+    }
+}
+```
 
 ## Rewarded Interstitial Ads
 
