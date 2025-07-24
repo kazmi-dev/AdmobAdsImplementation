@@ -44,22 +44,6 @@ daggerHilt_version = "2.55"
 ksp_version = "2.1.0-1.0.29"
 ```
 
-#### 📌 2. Annotate Your Application Class
-
-```anotate
-@HiltAndroidApp
-class MyApp : Application()
-```
-
-#### 📌 3. Update Manifest file
-
-```update
-<application
-    android:name=".MyApp"
-    ... >
-</application>
-```
-
 #### Now add add dependencies and plugins in `build.gradle` for both app and project level as below:
 #### App Level:
 
@@ -78,6 +62,22 @@ Plugin:
 ```plugin
 alias(libs.plugins.hilt) apply  false
 alias(libs.plugins.ksp) apply  false
+```
+
+#### 📌 2. Annotate Your Application Class
+
+```anotate
+@HiltAndroidApp
+class MyApp : Application()
+```
+
+#### 📌 3. Update Manifest file
+
+```update
+<application
+    android:name=".MyApp"
+    ... >
+</application>
 ```
 
 ### 2. 🔌 Google Services Setup (Required for AdMob)
