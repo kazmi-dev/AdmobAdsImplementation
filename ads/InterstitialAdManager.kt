@@ -48,13 +48,13 @@ class InterstitialAdManager @Inject constructor(
 
     }
 
-    fun showAdIfAvailable(activity: Activity, callback: ((AdState)-> Unit)? = null) {
+    fun showAdIfAvailable(activity: Activity, callback: (InterstitialAdCallback)-> Unit) {
 
         //check if ad is not available to show
         if (interstitialAd == null) {
             Log.d(INTERSTITIAL_LOG, "showAdIfAvailable: Ad not available, preloading ad")
             preloadAd()
-            callback?.invoke(AdState.FAILED_TO_SHOW)
+            callback.invoke(InterstitialAdCallback.FAILED_TO_SHOW)
             return
         }
 
@@ -69,7 +69,7 @@ class InterstitialAdManager @Inject constructor(
 
     }
 
-    fun showAdOnDemand(activity: Activity, adUnitId: String, callback: ((AdState) -> Unit)?) {
+    fun showAdOnDemand(activity: Activity, adUnitId: String, callback: (InterstitialAdCallback) -> Unit) {
 
         //check if ad is already showing
         if (isAdShowing) {
@@ -79,25 +79,21 @@ class InterstitialAdManager @Inject constructor(
 
         //check if ad is not available
         if (interstitialAd == null) {
-            loadAd(adUnitId) {isLoaded->
-                if (isLoaded){
-                    //show ad
-                    attachFullscreenCallback(isPreloadAfterDismiss = false, callback = callback)
-                    isAdShowing = true
-                    interstitialAd?.show(activity)
-                }else{
-                    callback?.invoke(AdState.FAILED_TO_LOAD)
-                }
+            loadAd(adUnitId) {
+                //show ad
+                attachFullscreenCallback(isPreloadAfterDismiss = false, callback = callback)
+                isAdShowing = true
+                interstitialAd?.show(activity)
             }
             return
         }
 
         //show ad
-        showAd(activity, isPreloadAfterDismiss = false)
+        showAd(activity, isPreloadAfterDismiss = false, callback)
 
     }
 
-    private fun loadAd(adUnitId: String, callback: (Boolean) -> Unit) {
+    private fun loadAd(adUnitId: String, onLoaded: () -> Unit) {
         isAdLoading = true
 
         val adRequest = AdRequest.Builder().build()
@@ -110,20 +106,19 @@ class InterstitialAdManager @Inject constructor(
                     Log.d(INTERSTITIAL_LOG, "onAdLoaded: Ad loaded")
                     isAdLoading = false
                     interstitialAd = ad
-                    callback(true)
+                    onLoaded()
                 }
 
                 override fun onAdFailedToLoad(adLoadError: LoadAdError) {
                     Log.d(INTERSTITIAL_LOG, "onAdFailedToLoad: ${adLoadError.message}")
                     isAdLoading = false
                     interstitialAd = null
-                    callback(false)
                 }
             }
         )
     }
 
-    private fun showAd(activity: Activity, isPreloadAfterDismiss: Boolean, callback: ((AdState)-> Unit)? = null) {
+    private fun showAd(activity: Activity, isPreloadAfterDismiss: Boolean, callback: (InterstitialAdCallback)-> Unit) {
         attachFullscreenCallback(isPreloadAfterDismiss, callback)
         isAdShowing = true
         interstitialAd?.show(activity)
@@ -131,14 +126,14 @@ class InterstitialAdManager @Inject constructor(
 
     private fun attachFullscreenCallback(
         isPreloadAfterDismiss: Boolean,
-        callback: ((AdState) -> Unit)?
+        callback: (InterstitialAdCallback) -> Unit
     ) {
         //callback for ad showing
         interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
 
             override fun onAdShowedFullScreenContent() {
                 Log.d(INTERSTITIAL_LOG, "onAdShowedFullScreenContent: Ad showed")
-                callback?.invoke(AdState.SHOWED)
+                callback.invoke(InterstitialAdCallback.SHOWED)
             }
 
             override fun onAdDismissedFullScreenContent() {
@@ -149,7 +144,7 @@ class InterstitialAdManager @Inject constructor(
                 interstitialAd = null
                 isAdShowing = false
                 if (isPreloadAfterDismiss) preloadAd()
-                callback?.invoke(AdState.DISMISSED)
+                callback.invoke(InterstitialAdCallback.DISMISSED)
             }
 
             override fun onAdFailedToShowFullScreenContent(adShowError: AdError) {
@@ -159,8 +154,13 @@ class InterstitialAdManager @Inject constructor(
                 )
                 interstitialAd = null
                 isAdShowing = false
-                callback?.invoke(AdState.FAILED_TO_SHOW)
+                callback.invoke(InterstitialAdCallback.FAILED_TO_SHOW)
             }
         }
     }
+    
+    enum class InterstitialAdCallback{
+        FAILED_TO_SHOW, SHOWED, DISMISSED
+    }
+
 }
