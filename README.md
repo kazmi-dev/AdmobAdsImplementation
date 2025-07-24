@@ -275,6 +275,16 @@ fun preLoadAd(
 | `adUnitId` | `String`     | ✅ Yes    | Your **Rewarded Interstitial Ad Unit ID** from AdMob.             |
 | `onLoaded` | `() -> Unit` | ✅ Yes    | Lambda called only when the ad is successfully loaded and cached. |
 
+#### Example:
+
+```example
+rewardInterstitialManager.preLoadAd(
+    adUnitId = getString(R.string.reward_interstitial_ad_unit_id)
+){
+    // on ad loaded
+}
+```
+
 #### 2. Show Ad:
 
 ```show ad
@@ -290,6 +300,31 @@ fun showAdIfAvailable(
 | `activity` | `Activity`                               | ✅ Yes    | The current activity used to show the ad.                             |
 | `adUnitId` | `String`                                 | ✅ Yes    | The same **Rewarded Interstitial Ad Unit ID** used during preloading. |
 | `callback` | `(RewardInterstitialAdCallback) -> Unit` | ✅ Yes    | Callback to listen for ad status and rewards.                         |
+
+#### Example:
+
+```example
+rewardInterstitialManager.showAdIfAvailable(
+    activity = this,
+    adUnitId = getString(R.string.reward_interstitial_ad_unit_id)
+) { adState ->
+    when (adState) {
+        is RewardInterstitialAdCallback.Loaded -> {
+            Log.d("Ad", "Ad shown.")
+        }
+        is RewardInterstitialAdCallback.Closed -> {
+            Log.d("Ad", "User closed the ad.")
+        }
+        is RewardInterstitialAdCallback.Failed -> {
+            Log.e("Ad", "No ad available.")
+        }
+        is RewardInterstitialAdCallback.RewardEarned -> {
+            Log.d("Ad", "User earned: ${adState.amount} ${adState.type}")
+            // Grant the reward here
+        }
+    }
+}
+```
 
 
 
