@@ -131,6 +131,14 @@ class RewardedInterstitialAdManager @Inject constructor(
         }
     }
 
+    fun showAdIfAvailable(activity: Activity, adUnitId: String, callback: (adState: RewardInterstitialAdCallback) -> Unit){
+        if (rewardedInterstitialAd == null){
+            Log.d(REWARDED_INTERSTITIAL_LOG, "showAdIfAvailable: Ad not available")
+            return
+        }
+        showAd(activity, callback)
+    }
+    
     enum class RewardInterstitialAdCallback {
         FAILED_TO_SHOW, SHOWED, REWARDED, DISMISSED
     }
