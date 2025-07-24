@@ -12,6 +12,52 @@ Supports:
 
 ---
 
+## 🛠️ Prerequisites
+
+Requirements:
+- ✅ Dagger/Hilt
+- ✅ Google Ads services (play_services_ads_)
+
+## Setup Prerequisites:
+
+### 🧱 Hilt Setup (Required)
+This library uses Dagger Hilt for dependency injection. Please complete the following setup before using the Ads SDK.
+
+#### 📌 1. Add Hilt Depedencies
+
+Add following depedencies and plugins to `libs.versions.toml`
+
+Depedencies:
+```depdencies
+dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt_version" }
+dagger-ksp = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "daggerHilt_version" }
+```
+Plugin:
+```plugin
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt_version" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp_version" }
+```
+Versions:
+```versions
+daggerHilt_version = "2.55"
+ksp_version = "2.1.0-1.0.29"
+```
+
+Now add add depedencies and plugins in `build.gradle` for both app and project level as below:
+
+App Level:
+
+Plugins:
+```plugin
+alias(libs.plugins.ksp)
+alias(libs.plugins.hilt)
+```
+Depedencies:
+```depdencies
+implementation(libs.dagger.hilt)
+ksp(libs.dagger.ksp)
+```
+
 ## 🔧 Banner and Collapsible Banner Ads
 
 ### 1. Initialization:
