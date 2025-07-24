@@ -70,44 +70,98 @@ bannerAdManager.showBannerAd(
 ```
 
 ### 2. Show Ads on demand:
-This function loads and immediately shows an interstitial ad at runtime. It's designed for on-the-spot ad display without preloading.
+This function is used to load and show an Interstitial Ad on demand — all in one call. It is best used when you're okay with a short delay while the ad loads and shows immediately afterward.
 
 ```show on demand ad
 fun showAdOnDemand(
     activity: Activity,
     adUnitId: String,
-    callback: (AdState) -> Unit
+    callback: (InterstitialAdCallback) -> Unit
 )
 ```
 
-| Parameter  | Type                | Required | Description                                                                                    |
-| ---------- | ------------------- | -------- | ---------------------------------------------------------------------------------------------- |
-| `activity` | `Activity`          | ✅ Yes    | The current activity context used to display the ad.                                           |
-| `adUnitId` | `String`            | ✅ Yes    | Your **Interstitial Ad Unit ID** from AdMob.                                                   |
-| `callback` | `(AdState) -> Unit` | ✅ Yes    | Lambda callback that provides ad state results. It must handle one of the `AdState` responses. |
+| Parameter  | Type                               | Required | Description                                               |
+| ---------- | ---------------------------------- | -------- | --------------------------------------------------------- |
+| `activity` | `Activity`                         | ✅ Yes    | The current activity used to present the ad.              |
+| `adUnitId` | `String`                           | ✅ Yes    | Your **Interstitial Ad Unit ID** from AdMob.              |
+| `callback` | `(InterstitialAdCallback) -> Unit` | ✅ Yes    | Lambda that returns ad status results via a sealed class. |
+
+#### Example:
+
+```show ad on demand
+interstitialAdManager.showAdOnDemand(
+    activity = this,
+    adUnitId = getString(R.string.interstitial_ad_unit_id)
+) { adState ->
+    when (adState) {
+        is InterstitialAdCallback.Loaded -> {
+            Log.d("Ad", "Interstitial Ad Shown")
+        }
+        is InterstitialAdCallback.Closed -> {
+            Log.d("Ad", "Interstitial Ad Closed by user")
+        }
+        is InterstitialAdCallback.Failed -> {
+            Log.e("Ad", "Interstitial Ad Failed to load/show")
+        }
+    }
+}
+```
 
 ### 3. Show Ads by preloading:
-This function shows a previously preloaded interstitial ad if it's ready. It’s ideal when you’ve already loaded an ad and want to display it only if available, avoiding unnecessary reloads or errors.
+This function is used to load an interstitial ad in advance, so it can be shown instantly later using showAdIfAvailable(). This improves user experience by eliminating loading delays when showing the ad.
+
+#### 1. Pre load ad:
 
 ```preloaded ads
-fun showAdIfAvailable(
-    activity: Activity,
-    callback: (AdState) -> Unit
-)
+fun preloadAd(adUnitId: String)
 ```
 
-| Parameter  | Type                | Required | Description                                                                    |
-| ---------- | ------------------- | -------- | ------------------------------------------------------------------------------ |
-| `activity` | `Activity`          | ✅ Yes    | The current activity used to show the interstitial ad.                         |
-| `callback` | `(AdState) -> Unit` | ✅ Yes    | Lambda function that returns the ad display state (Loaded, Closed, or Failed). |
+| Parameter  | Type     | Required | Description                                                                                      |
+| ---------- | -------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `adUnitId` | `String` | ✅ Yes    | Your **Interstitial Ad Unit ID** from AdMob. Use the same ID when calling `showAdIfAvailable()`. |
 
 #### Example:
 
 ```example
-InterstitialAdManager.preLoadAd(
+interstitialAdManager.preloadAd(
     adUnitId = getString(R.string.interstitial_ad_unit_id)
-) {
-    Log.d("Ad", "Ad successfully preloaded.")
+)
+```
+
+#### 2. Show Ad:
+
+```show ad
+fun showAdIfAvailable(
+    activity: Activity,
+    adUnitId: String,
+    callback: (InterstitialAdCallback) -> Unit
+)
+```
+
+| Parameter  | Type                               | Required | Description                                                                 |
+| ---------- | ---------------------------------- | -------- | --------------------------------------------------------------------------- |
+| `activity` | `Activity`                         | ✅ Yes    | The current activity context used to display the ad.                        |
+| `adUnitId` | `String`                           | ✅ Yes    | Your **Interstitial Ad Unit ID**. Must match the one used in `preloadAd()`. |
+| `callback` | `(InterstitialAdCallback) -> Unit` | ✅ Yes    | Callback for handling the ad's load/show state and events.                  |
+
+#### Example:
+
+```example
+interstitialAdManager.showAdIfAvailable(
+    activity = this,
+    adUnitId = getString(R.string.interstitial_ad_unit_id)
+) { adState ->
+    when (adState) {
+        is InterstitialAdCallback.Loaded -> {
+            Log.d("Ad", "Interstitial ad shown.")
+        }
+        is InterstitialAdCallback.Closed -> {
+            Log.d("Ad", "User closed the interstitial ad.")
+        }
+        is InterstitialAdCallback.Failed -> {
+            Log.e("Ad", "No ad available or failed to show.")
+        }
+    }
 }
 ```
 
