@@ -1,3 +1,4 @@
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.google.android.gms.ads.AdActivity
@@ -75,7 +76,7 @@ class RewardedAdManager @Inject constructor(
     }
 
     private fun showAd(
-        activity: AdActivity,
+        activity: Activity,
         callback: (adState: RewardAdCallback) -> Unit
     ) {
         attachFullScreenCallback(callback)
@@ -129,6 +130,14 @@ class RewardedAdManager @Inject constructor(
         loadAd(adUnitId) {
             onLoaded()
         }
+    }
+
+    fun showAdIfAvailable(activity: Activity, adUnitId: String, callback: (adState: RewardAdCallback) -> Unit){
+        if (rewardedAd == null){
+            Log.d(REWARDED_LOG, "showAdIfAvailable: Ad not available")
+            return
+        }
+        showAd(activity, callback)
     }
 
     enum class RewardAdCallback {
