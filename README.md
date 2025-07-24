@@ -17,10 +17,11 @@ Supports:
 Requirements:
 - ✅ Dagger/Hilt
 - ✅ Google Ads services (play_services_ads_)
+- ✅ Internet 🤪
 
 ## Setup Prerequisites:
 
-### 🧱 Hilt Setup (Required)
+### 1. 🧱 Hilt Setup (Required)
 This library uses Dagger Hilt for dependency injection. Please complete the following setup before using the Ads SDK.
 
 #### 📌 1. Add Hilt Dependencies
@@ -43,6 +44,22 @@ daggerHilt_version = "2.55"
 ksp_version = "2.1.0-1.0.29"
 ```
 
+### 📌 2. Annotate Your Application Class
+
+```anotate
+@HiltAndroidApp
+class MyApp : Application()
+```
+
+### 📌 3. Update Manifest file
+
+```update
+<application
+    android:name=".MyApp"
+    ... >
+</application>
+```
+
 #### Now add add dependencies and plugins in `build.gradle` for both app and project level as below:
 #### App Level:
 
@@ -61,6 +78,25 @@ Plugin:
 ```plugin
 alias(libs.plugins.hilt) apply  false
 alias(libs.plugins.ksp) apply  false
+```
+
+### 2. 🔌 Google Services Setup (Required for AdMob)
+To use AdMob (Google Ads), your project must include the Google Services plugin and the Google Mobile Ads SDK.
+
+#### 1. Add depdendency to `libs.versions.toml`:
+
+Dependency:
+```depdency
+google-ads = {group = "com.google.android.gms", name = "play-services-ads", version.ref = "google_services_ads_version"}
+```
+Versions:
+```version
+google_services_ads_version = "24.4.0"
+```
+#### 2. Add to `build.gradle`
+
+```depdency
+implementation(libs.google.ads)
 ```
 
 ## 🔧 Banner and Collapsible Banner Ads
