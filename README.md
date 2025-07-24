@@ -23,11 +23,11 @@ Requirements:
 ### 🧱 Hilt Setup (Required)
 This library uses Dagger Hilt for dependency injection. Please complete the following setup before using the Ads SDK.
 
-#### 📌 1. Add Hilt Depedencies
+#### 📌 1. Add Hilt Dependencies
 
 Add following depedencies and plugins to `libs.versions.toml`
 
-Depedencies:
+Dependencies:
 ```depdencies
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHilt_version" }
 dagger-ksp = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "daggerHilt_version" }
@@ -43,7 +43,7 @@ daggerHilt_version = "2.55"
 ksp_version = "2.1.0-1.0.29"
 ```
 
-Now add add depedencies and plugins in `build.gradle` for both app and project level as below:
+Now add add dependencies and plugins in `build.gradle` for both app and project level as below:
 
 App Level:
 
@@ -52,7 +52,7 @@ Plugins:
 alias(libs.plugins.ksp)
 alias(libs.plugins.hilt)
 ```
-Depedencies:
+Dependencies:
 ```depdencies
 implementation(libs.dagger.hilt)
 ksp(libs.dagger.ksp)
