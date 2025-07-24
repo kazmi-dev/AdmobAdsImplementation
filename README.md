@@ -211,7 +211,7 @@ setAdVisibilityController(adVisibilityController: AdVisibilityController)
 ### 3. Show Ads
 If on demand is set `true` than Ad will be loaded and than showd otherwise ad will be preloaded and will be shown instantly
 
-## Native ads
+## 🔧 Native ads
 
 ### 1. Initialization:
 
@@ -238,7 +238,7 @@ fun showNativeAdOnDemand(
 | `nativeAdContainer` | `FrameLayout`    | ✅ Yes    | The container where the native ad view will be displayed.                  |
 | `adSize`            | `NativeTemplate` | ❌ No     | Enum defining the layout size/style of the native ad. Default is `MEDIUM`. |
 
-## Rewarded Ads
+## 🔧 Rewarded Ads
 
 ### 1. Initialization:
 
@@ -331,7 +331,7 @@ rewardedAdManager.showAdIfAvailable(
 }
 ```
 
-## Rewarded Interstitial Ads
+## 🔧 Rewarded Interstitial Ads
 
 ### 1. Initialization:
 
