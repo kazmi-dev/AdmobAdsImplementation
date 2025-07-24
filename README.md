@@ -44,7 +44,7 @@ ksp_version = "2.1.0-1.0.29"
 ```
 
 #### Now add add dependencies and plugins in `build.gradle` for both app and project level as below:
-##### App Level:
+#### App Level:
 
 Plugins:
 ```plugin
@@ -56,7 +56,7 @@ Dependencies:
 implementation(libs.dagger.hilt)
 ksp(libs.dagger.ksp)
 ```
-##### Project Level:
+#### Project Level:
 Plugin:
 ```plugin
 alias(libs.plugins.hilt) apply  false
