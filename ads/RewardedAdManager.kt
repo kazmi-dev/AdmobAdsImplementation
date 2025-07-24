@@ -12,11 +12,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RewardedAdManager@Inject constructor(
+class RewardedAdManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
-    companion object{
+    companion object {
         private const val REWARDED_LOG = "rewardedAd_2836429847092384"
     }
 
@@ -24,14 +24,14 @@ class RewardedAdManager@Inject constructor(
     private var isLoading: Boolean = false
     private var isShowing: Boolean = false
 
-    private fun loadAd(adUnitId: String, onLoad: () -> Unit){
+    private fun loadAd(adUnitId: String, onLoad: () -> Unit) {
         isLoading = true
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(
             context,
             adUnitId,
             adRequest,
-            object: RewardedAdLoadCallback(){
+            object : RewardedAdLoadCallback() {
                 override fun onAdLoaded(ad: RewardedAd) {
                     Log.d(REWARDED_LOG, "onAdLoaded: Ad loaded successfully")
                     rewardedAd = ad
@@ -48,81 +48,91 @@ class RewardedAdManager@Inject constructor(
         )
     }
 
-    private fun loadAndShowAd(activity: AdActivity, adUnitId: String, callback: (adState: AdCallback)-> Unit){
+    private fun loadAndShowAd(
+        activity: AdActivity,
+        adUnitId: String,
+        callback: (adState: RewardAdCallback) -> Unit
+    ) {
 
-        if (rewardedAd != null){
+        if (rewardedAd != null) {
             Log.d(REWARDED_LOG, "loadAndShowAd: Ad already available")
             showAd(activity, callback)
             return
         }
 
-        if (isLoading){
+        if (isLoading) {
             Log.d(REWARDED_LOG, "loadAndShowAd: Ad already loading")
             return
         }
-        if (isShowing){
+        if (isShowing) {
             Log.d(REWARDED_LOG, "loadAndShowAd: Ad already showing")
             return
         }
         isLoading = true
-        loadAd(adUnitId){
+        loadAd(adUnitId) {
             showAd(activity, callback)
         }
     }
 
     private fun showAd(
         activity: AdActivity,
-        callback: (adState: AdCallback) -> Unit
+        callback: (adState: RewardAdCallback) -> Unit
     ) {
         attachFullScreenCallback(callback)
         isShowing = true
-        rewardedAd?.show(activity){
-            Log.d(REWARDED_LOG, "loadAndShowAd: Ad rewarded: type: ${it.type}, amount: ${it.amount}")
-            callback(AdCallback.REWARDED)
+        rewardedAd?.show(activity) {
+            Log.d(
+                REWARDED_LOG,
+                "loadAndShowAd: Ad rewarded: type: ${it.type}, amount: ${it.amount}"
+            )
+            callback(RewardAdCallback.REWARDED)
         }
     }
 
-    private fun attachFullScreenCallback(callback: (adState: AdCallback) -> Unit) {
-        rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback(){
+    private fun attachFullScreenCallback(callback: (adState: RewardAdCallback) -> Unit) {
+        rewardedAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdShowedFullScreenContent() {
                 Log.d(REWARDED_LOG, "onAdShowedFullScreenContent: Ad showed")
-                callback(AdCallback.SHOWED)
+                callback(RewardAdCallback.SHOWED)
             }
 
             override fun onAdDismissedFullScreenContent() {
                 Log.d(REWARDED_LOG, "onAdDismissedFullScreenContent: Ad dismissed")
-                callback(AdCallback.DISMISSED)
+                callback(RewardAdCallback.DISMISSED)
                 rewardedAd = null
                 isShowing = false
             }
 
             override fun onAdFailedToShowFullScreenContent(error: AdError) {
-                Log.d(REWARDED_LOG, "onAdFailedToShowFullScreenContent: Ad failed to show: Error: ${error.message}")
-                callback(AdCallback.FAILED_TO_SHOW)
+                Log.d(
+                    REWARDED_LOG,
+                    "onAdFailedToShowFullScreenContent: Ad failed to show: Error: ${error.message}"
+                )
+                callback(RewardAdCallback.FAILED_TO_SHOW)
                 rewardedAd = null
                 isShowing = false
             }
         }
     }
 
-    fun preLoadAd(adUnitId: String, callback: (adState: AdCallback)-> Unit){
-        if (rewardedAd != null){
+    fun preLoadAd(adUnitId: String, onLoaded: () -> Unit) {
+        if (rewardedAd != null) {
             Log.d(REWARDED_LOG, "loadAndShowAd: Ad already available")
             return
         }
 
-        if (isLoading){
+        if (isLoading) {
             Log.d(REWARDED_LOG, "preLoadAd: Ad already loading")
             return
         }
         isLoading = true
-        loadAd(adUnitId){
-            callback(AdCallback.LOADED)
+        loadAd(adUnitId) {
+            onLoaded()
         }
     }
 
-    enum class AdCallback{
-        LOADED, FAILED_TO_LOAD, FAILED_TO_SHOW, SHOWED, REWARDED, DISMISSED
+    enum class RewardAdCallback {
+        FAILED_TO_SHOW, SHOWED, REWARDED, DISMISSED
     }
 
 }
