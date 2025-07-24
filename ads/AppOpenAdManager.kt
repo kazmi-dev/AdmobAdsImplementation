@@ -77,7 +77,7 @@ class AppOpenAdManager @Inject constructor(
 
     private fun attachFullScreenAdCallback(
         isPreloadAfterDismiss: Boolean,
-        callback: ((AdState) -> Unit)? = null
+        callback: ((AppOpenAdCallback) -> Unit)? = null
     ) {
         //callback for ad showing
         appOpenAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
@@ -85,7 +85,7 @@ class AppOpenAdManager @Inject constructor(
             override fun onAdShowedFullScreenContent() {
                 Log.d(APP_OPEN_LOG, "onAdShowedFullScreenContent: Ad showed")
                 adVisibilityController?.closeAds()
-                callback?.invoke(AdState.SHOWED)
+                callback?.invoke(AppOpenAdCallback.SHOWED)
             }
 
             override fun onAdDismissedFullScreenContent() {
@@ -96,7 +96,7 @@ class AppOpenAdManager @Inject constructor(
                 appOpenAd = null
                 adVisibilityController?.restoreAds()
                 if (isPreloadAfterDismiss) preloadAd()
-                callback?.invoke(AdState.DISMISSED)
+                callback?.invoke(AppOpenAdCallback.DISMISSED)
             }
 
             override fun onAdFailedToShowFullScreenContent(adShowError: AdError) {
@@ -105,7 +105,7 @@ class AppOpenAdManager @Inject constructor(
                     "onAdFailedToShowFullScreenContent: Ad failed to show ${adShowError.message}"
                 )
                 appOpenAd = null
-                callback?.invoke(AdState.FAILED_TO_SHOW)
+                callback?.invoke(AppOpenAdCallback.FAILED_TO_SHOW)
             }
         }
     }
@@ -202,6 +202,10 @@ class AppOpenAdManager @Inject constructor(
     interface AdVisibilityController{
         fun closeAds()
         fun restoreAds()
+    }
+    
+    enum class AppOpenAdCallback{
+        FAILED_TO_SHOW, SHOWED, DISMISSED
     }
 
 }
