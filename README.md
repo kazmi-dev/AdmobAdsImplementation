@@ -188,7 +188,7 @@ This function loads and immediately shows a rewarded ad. It’s a one-liner solu
 
 ```load and show ad
 private fun loadAndShowAd(
-    activity: AdActivity,
+    activity: Activity,
     adUnitId: String,
     callback: (adState: RewardAdCallback) -> Unit
 )
@@ -196,7 +196,7 @@ private fun loadAndShowAd(
 
 | Parameter  | Type                         | Required | Description                                                                          |
 | ---------- | ---------------------------- | -------- | ------------------------------------------------------------------------------------ |
-| `activity` | `AdActivity` (or `Activity`) | ✅ Yes    | The activity used to show the rewarded ad.                                           |
+| `activity` | `Activity`                   | ✅ Yes    | The activity used to show the rewarded ad.                                           |
 | `adUnitId` | `String`                     | ✅ Yes    | Your **Rewarded Ad Unit ID** from AdMob.                                             |
 | `callback` | `(RewardAdCallback) -> Unit` | ✅ Yes    | Lambda function that returns the ad status, including reward info and failure state. |
 
