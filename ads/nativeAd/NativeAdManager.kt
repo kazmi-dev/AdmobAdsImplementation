@@ -8,6 +8,8 @@ import android.widget.LinearLayout
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.ai.fusion.character.merge.video.generator.databinding.NativeAdMediumLayoutBinding
+import com.ai.fusion.character.merge.video.generator.databinding.NativeAdSmallLayoutBinding
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -15,8 +17,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
-import com.kazmi.dev.ads.google.utils.databinding.NativeAdMediumLayoutBinding
-import com.kazmi.dev.ads.google.utils.databinding.NativeAdSmallLayoutBinding
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -53,7 +53,6 @@ class NativeAdManager @Inject constructor(
 
                 override fun onAdImpression() {
                     Log.d(NATIVE_LOG, "loadNativeAd: Ad Impression, shown.")
-                    nativeAd = null
                 }
             }).build()
 
@@ -77,7 +76,7 @@ class NativeAdManager @Inject constructor(
 
         loadNativeAd(adUnitId){
             nativeAd?.let {ad->
-              showNativeAd(ad, adSize, nativeAdContainer)
+                showNativeAd(ad, adSize, nativeAdContainer)
             }?: run {
                 Log.d(NATIVE_LOG, "loadNativeAd: Ad not Available to populate")
                 nativeAd = null
@@ -95,6 +94,13 @@ class NativeAdManager @Inject constructor(
                 populateNativeMediumAd(ad, nativeAdContainer)
             }
         }
+    }
+
+    //Destroy native ad wherever you want to
+    fun destroyNativeAd(){
+        nativeAd?.destroy()
+        nativeAd = null
+        Log.d(NATIVE_LOG, "DestroyNativeAd: Destroyed")
     }
 
     private fun populateNativeMediumAd(ad: NativeAd, nativeAdContainer: FrameLayout) {
