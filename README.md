@@ -1,6 +1,6 @@
-# 📢 Android Google Ads Library
+# 📢 Android Google Ads Implementation
 
-A lightweight Kotlin-based library to easily integrate **Google AdMob Ads** into any Android project with minimal setup.
+A lightweight Kotlin-based implementation to easily integrate **Google AdMob Ads** into any Android project with minimal setup.
 
 Supports:
 - ✅ Banner and Collapsible Banner Ads  
