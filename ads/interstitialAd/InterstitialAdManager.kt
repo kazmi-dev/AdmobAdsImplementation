@@ -8,6 +8,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,6 +24,7 @@ class InterstitialAdManager @Inject constructor(
     private var interstitialAd: InterstitialAd? = null
     private var isAdLoading: Boolean = false
     private var isAdShowing: Boolean = false
+    private var activityRef : WeakReference<Activity>? = null
 
     fun preloadAd(adUnitId: String) {
 
@@ -46,6 +48,7 @@ class InterstitialAdManager @Inject constructor(
     }
 
     fun showAdIfAvailable(activity: Activity, adUnitId: String,  callback: (InterstitialAdCallback)-> Unit) {
+        activityRef = WeakReference(activity)
 
         //check if ad is not available to show
         if (interstitialAd == null) {
@@ -58,16 +61,23 @@ class InterstitialAdManager @Inject constructor(
         //check if ad is already showing
         if (isAdShowing) {
             Log.d(INTERSTITIAL_LOG, "showAdIfAvailable: Ad already showing")
+            releaseResources()
             return
         }
 
         //show ad
-        showAd(activity, adUnitId, isPreloadAfterDismiss = true, callback)
+        showAd(adUnitId, isPreloadAfterDismiss = true, callback)
 
     }
 
-    fun showAdOnDemand(activity: Activity, adUnitId: String, callback: (InterstitialAdCallback) -> Unit) {
+    private fun releaseResources() {
+        activityRef?.clear()
+        activityRef = null
+    }
 
+    fun showAdOnDemand(activity: Activity, adUnitId: String, callback: (InterstitialAdCallback) -> Unit) {
+        activityRef = WeakReference(activity)
+        
         //check if ad is already showing
         if (isAdShowing) {
             Log.d(INTERSTITIAL_LOG, "showAdOnDemand: Ad already showing")
@@ -86,7 +96,7 @@ class InterstitialAdManager @Inject constructor(
         }
 
         //show ad
-        showAd(activity, adUnitId, isPreloadAfterDismiss = false, callback)
+        showAd(adUnitId, isPreloadAfterDismiss = false, callback)
 
     }
 
@@ -115,10 +125,12 @@ class InterstitialAdManager @Inject constructor(
         )
     }
 
-    private fun showAd(activity: Activity, adUnitId: String, isPreloadAfterDismiss: Boolean, callback: (InterstitialAdCallback)-> Unit) {
+    private fun showAd(adUnitId: String, isPreloadAfterDismiss: Boolean, callback: (InterstitialAdCallback)-> Unit) {
         attachFullscreenCallback(adUnitId, isPreloadAfterDismiss, callback)
         isAdShowing = true
-        interstitialAd?.show(activity)
+       activityRef?.get()?.let {
+           interstitialAd?.show(it)
+       }
     }
 
     private fun attachFullscreenCallback(
