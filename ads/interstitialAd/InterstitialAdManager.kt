@@ -1,3 +1,4 @@
+
 import android.app.Activity
 import android.content.Context
 import android.util.Log
@@ -43,6 +44,7 @@ class InterstitialAdManager @Inject constructor(
         //loadAd
         loadAd(adUnitId) {
             Log.d(INTERSTITIAL_LOG, "preloadAd: Ad loaded")
+            releaseResources()
         }
 
     }
@@ -77,7 +79,7 @@ class InterstitialAdManager @Inject constructor(
 
     fun showAdOnDemand(activity: Activity, adUnitId: String, callback: (InterstitialAdCallback) -> Unit) {
         activityRef = WeakReference(activity)
-        
+
         //check if ad is already showing
         if (isAdShowing) {
             Log.d(INTERSTITIAL_LOG, "showAdOnDemand: Ad already showing")
@@ -153,7 +155,7 @@ class InterstitialAdManager @Inject constructor(
                 )
                 interstitialAd = null
                 isAdShowing = false
-                if (isPreloadAfterDismiss) preloadAd(adUnitId)
+                if (isPreloadAfterDismiss) preloadAd(adUnitId) else releaseResources()
                 callback.invoke(InterstitialAdCallback.DISMISSED)
             }
 
@@ -164,7 +166,22 @@ class InterstitialAdManager @Inject constructor(
                 )
                 interstitialAd = null
                 isAdShowing = false
+                releaseResources()
                 callback.invoke(InterstitialAdCallback.FAILED_TO_SHOW)
+            }
+
+            override fun onAdClicked() {
+                Log.d(
+                    INTERSTITIAL_LOG,
+                    "onAdFailedToShowFullScreenContent: Ad Clicked"
+                )
+            }
+
+            override fun onAdImpression() {
+                Log.d(
+                    INTERSTITIAL_LOG,
+                    "onAdFailedToShowFullScreenContent: Ad Impression"
+                )
             }
         }
     }
