@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,8 +35,8 @@ fun NativeAdView(modifier: Modifier = Modifier, isSmall: Boolean = false, adUniI
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }
 
     LaunchedEffect(Unit) {
-        if (nativeAd == null){
-            com.kazmi.dev.jetpackcompose.ads.rewardedAd.loadNativeAd(context, adUniId) {
+        if (nativeAd == null) {
+            loadNativeAd(context, adUniId) {
                 nativeAd = it
             }
         }
@@ -44,54 +45,75 @@ fun NativeAdView(modifier: Modifier = Modifier, isSmall: Boolean = false, adUniI
     nativeAd?.let {
         ShowNativeAd(isSmall = isSmall, nativeAd = it)
     }
+
+    DisposableEffect(nativeAd){
+        onDispose { 
+            nativeAd?.destroy()
+            nativeAd = null
+        }
+    }
+
 }
 
 @Composable
-private fun ShowNativeAd(modifier: Modifier = Modifier,isSmall: Boolean, nativeAd: NativeAd) {
+private fun ShowNativeAd(modifier: Modifier = Modifier, isSmall: Boolean, nativeAd: NativeAd) {
     Column(
         modifier = modifier.wrapContentSize()
-    ){
+    ) {
         AndroidView(
-            factory = {context->
+            factory = { context ->
                 val inflater = LayoutInflater.from(context)
                 val binding: ViewBinding = if (isSmall) NativeAdSmallLayoutBinding.inflate(inflater) else NativeAdMediumLayoutBinding.inflate(inflater)
-                if (isSmall){
-                    (binding as NativeAdSmallLayoutBinding).apply {
 
-                        com.kazmi.dev.jetpackcompose.ads.rewardedAd.populateNativeAd(
-                            nativeAd,
-                            binding.nativeAdView,
-                            binding.mediaView,
-                            binding.headlineView,
-                            binding.iconView,
-                            binding.bodyView,
-                            binding.headlineTv,
-                            binding.advertiserStoreView,
-                            binding.priceView,
-                            binding.ratingBar,
-                            binding.callToActionBtn
-                        )
-                    }
-                }else{
-                    (binding as NativeAdMediumLayoutBinding).apply {
-                        populateNativeAd(
-                            nativeAd,
-                            binding.nativeAdView,
-                            binding.mediaView,
-                            binding.headlineView,
-                            binding.iconView,
-                            binding.bodyView,
-                            binding.headlineTv,
-                            binding.advertiserStoreView,
-                            binding.priceView,
-                            binding.ratingBar,
-                            binding.callToActionBtn
-                        )
-                    }
-                }
+                //populateNativeAd
+                populatingNativeAd(isSmall, nativeAd, binding)
+
                 binding.root
+            },
+            update = {
+                val binding = if (isSmall) NativeAdSmallLayoutBinding.bind(it) else NativeAdMediumLayoutBinding.bind(it)
+
+                //populateNativeAd
+                populatingNativeAd(isSmall, nativeAd, binding)
             }
         )
+    }
+}
+
+private fun populatingNativeAd(isSmall: Boolean, nativeAd: NativeAd, binding: ViewBinding) {
+    if (isSmall) {
+        (binding as NativeAdSmallLayoutBinding).apply {
+
+            populateNativeAd(
+                nativeAd,
+                binding.nativeAdView,
+                binding.mediaView,
+                binding.headlineView,
+                binding.iconView,
+                binding.bodyView,
+                binding.headlineTv,
+                binding.advertiserStoreView,
+                binding.priceView,
+                binding.ratingBar,
+                binding.callToActionBtn
+            )
+        }
+    } else {
+        (binding as NativeAdMediumLayoutBinding).apply {
+            populateNativeAd(
+                nativeAd,
+                binding.nativeAdView,
+                binding.mediaView,
+                binding.headlineView,
+                binding.iconView,
+                binding.bodyView,
+                binding.headlineTv,
+                binding.advertiserStoreView,
+                binding.priceView,
+                binding.ratingBar,
+                binding.callToActionBtn
+            )
+        }
     }
 }
 
@@ -107,7 +129,7 @@ private fun populateNativeAd(
     priceView: TextView,
     ratingBar: RatingBar,
     callToActionBtn: Button
-){
+) {
     nativeAdView.apply {
         // media
         this.mediaView = mediaView
@@ -129,10 +151,10 @@ private fun populateNativeAd(
         nativeAd.advertiser?.let {
             this.advertiserView = advertiserStoreView
             advertiserStoreView.text = it
-        }?: nativeAd.store?.let {
+        } ?: nativeAd.store?.let {
             this.advertiserView = advertiserStoreView
             advertiserStoreView.text = it
-        }?:{
+        } ?: {
             advertiserStoreView.isVisible = false
         }
 
@@ -140,7 +162,7 @@ private fun populateNativeAd(
         nativeAd.price?.let {
             this.priceView = priceView
             priceView.text = it
-        }?:{
+        } ?: {
             priceView.isVisible = false
         }
 
@@ -157,13 +179,13 @@ private fun populateNativeAd(
     }
 }
 
-private fun loadNativeAd(context: Context, adUniId: String, onAdLoaded: (NativeAd)-> Unit) {
+private fun loadNativeAd(context: Context, adUniId: String, onAdLoaded: (NativeAd) -> Unit) {
     runCatching {
         AdLoader.Builder(context, adUniId)
-            .forNativeAd {ad->
+            .forNativeAd { ad ->
                 onAdLoaded(ad)
             }
-            .withAdListener(object : AdListener(){
+            .withAdListener(object : AdListener() {
                 override fun onAdLoaded() {
                     // ad load
                 }
