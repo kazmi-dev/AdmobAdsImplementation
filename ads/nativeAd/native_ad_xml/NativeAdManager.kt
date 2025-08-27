@@ -31,6 +31,7 @@ class NativeAdManager @Inject constructor(
 
     private var nativeAd: NativeAd? = null
     private var isAdLoading: Boolean = false
+    private var isAdShown: Boolean? = false
 
     private fun loadNativeAd(adUnitId: String, onLoad: () -> Unit) {
         //create ad loader
@@ -87,7 +88,7 @@ class NativeAdManager @Inject constructor(
 
     private fun showNativeAd(ad: NativeAd, adSize: NativeTemplate, nativeAdContainer: FrameLayout) {
         when(adSize){
-            NativeTemplate.SMALL->{
+            NativeTemplate.SMALL ->{
                 populateNativeSmallAd(ad, nativeAdContainer)
             }
             else-> {
@@ -98,9 +99,14 @@ class NativeAdManager @Inject constructor(
 
     //Destroy native ad wherever you want to
     fun destroyNativeAd(){
-        nativeAd?.destroy()
-        nativeAd = null
-        Log.d(NATIVE_LOG, "DestroyNativeAd: Destroyed")
+        nativeAd?.let {
+            if (isAdShown == true) {
+                isAdShown = false
+                it.destroy()
+                nativeAd = null
+                Log.d(NATIVE_LOG, "DestroyNativeAd: Destroyed")
+            }
+        }
     }
 
     private fun populateNativeMediumAd(ad: NativeAd, nativeAdContainer: FrameLayout) {
@@ -116,6 +122,7 @@ class NativeAdManager @Inject constructor(
                 iconView,
                 ratingBar,
                 advertiserStoreView,
+                priceView,
                 ad
             )
         }
@@ -140,6 +147,7 @@ class NativeAdManager @Inject constructor(
                 iconView,
                 ratingBar,
                 advertiserStoreView,
+                priceView,
                 ad
             )
         }
@@ -162,6 +170,7 @@ class NativeAdManager @Inject constructor(
         iconView: ImageView,
         ratingBar: RatingBar,
         advertiserStoreView: TextView,
+        priceView: TextView,
         ad: NativeAd,
     ){
         //populate headline view
@@ -184,38 +193,33 @@ class NativeAdManager @Inject constructor(
         nativeAdView.iconView = iconView
         iconView.setImageDrawable(ad.icon?.drawable)
 
-        //populate rating, advertiser and store view
-        when{
-            hasRating(ad)->{
-                nativeAdView.starRatingView = ratingBar
-                ratingBar.rating = ad.starRating?.toFloat() ?: 0f
-                ratingBar.isVisible = true
-            }
-            hasOnlyStore(ad)->{
+        //populate rating bar
+        ad.starRating?.let {
+            ratingBar.isVisible = true
+            ratingBar.rating = it.toFloat()
+        }
+
+        //populate advertiser and store view
+        ad.advertiser?.let {
+            nativeAdView.advertiserView = advertiserStoreView
+            advertiserStoreView.text = it
+        }?: run {
+            ad.store?.let {
                 nativeAdView.storeView = advertiserStoreView
-                advertiserStoreView.text = ad.store
-            }
-            else->{
-                nativeAdView.advertiserView = advertiserStoreView
-                advertiserStoreView.text = ad.advertiser
-            }
+                advertiserStoreView.text = it
+            }?: { advertiserStoreView.isVisible = false }
+        }
+
+        //populate price
+        ad.price?.let {
+            nativeAdView.priceView = advertiserStoreView
+            advertiserStoreView.text = it
+        }?:{
+            priceView.isVisible = false
         }
 
         //set Native ad view
         nativeAdView.setNativeAd(ad)
-    }
-
-    private fun hasRating(ad: NativeAd): Boolean {
-        return ad.starRating?.toFloat()?.let {rating->
-            rating > 0
-        }?: false
-    }
-    private fun hasOnlyStore(ad: NativeAd): Boolean {
-        return ad.store!= null && ad.advertiser == null
-    }
-
-    enum class NativeTemplate{
-        MEDIUM, SMALL, LARGE
     }
 
 }
