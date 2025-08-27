@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.gms.ads.nativead.NativeAdView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/native_ad_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -26,7 +25,7 @@
         <com.google.android.gms.ads.nativead.MediaView
             android:id="@+id/media_view"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_marginVertical="4dp"
             android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +75,7 @@
                     <LinearLayout
                         android:id="@+id/headlineView"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="0.5"
                         android:background="@android:color/transparent"
                         android:gravity="start|center"
@@ -89,7 +88,7 @@
                         <TextView
                             android:id="@+id/headlineTv"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_margin="0dp"
                             android:lines="1"
                             android:paddingHorizontal="5dp"
@@ -148,26 +147,59 @@
 
                         </RatingBar>
 
-                        <TextView
-                            android:id="@+id/advertiserStoreView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:background="@color/white"
-                            android:gravity="top"
-                            android:lines="1"
-                            android:textColor="@color/black"
-                            android:textSize="11sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/ad_notification_view"
-                            app:layout_constraintTop_toTopOf="parent" />
-
                     </LinearLayout>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="4dp"
+                android:gravity="start|center_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/middle">
+
+                <TextView
+                    android:id="@+id/advertiserStoreView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:gravity="top"
+                    android:lines="1"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ad_notification_view"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/priceView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:gravity="top"
+                    android:lines="1"
+                    android:textColor="@color/black"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ad_notification_view"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/bodyView"
@@ -176,11 +208,11 @@
                 android:paddingHorizontal="4dp"
                 android:paddingBottom="4dp"
                 android:textColor="@color/black"
-                android:textSize="11sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/middle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/middle" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
