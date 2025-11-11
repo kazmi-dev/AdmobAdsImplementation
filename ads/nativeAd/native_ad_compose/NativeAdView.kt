@@ -46,7 +46,7 @@ fun NativeAdView(modifier: Modifier = Modifier, isSmall: Boolean = false, adUniI
         ShowNativeAd(isSmall = isSmall, nativeAd = it)
     }
 
-    DisposableEffect(nativeAd){
+    DisposableEffect(Unit){
         onDispose { 
             nativeAd?.destroy()
             nativeAd = null
