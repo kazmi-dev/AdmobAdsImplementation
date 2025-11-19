@@ -15,7 +15,7 @@ Supports:
 ## 🛠️ Prerequisites
 
 Requirements:
-- ✅ Dagger/Hilt
+- ✅ Dagger/Hilt(using class Only), NO need otherwise
 - ✅ Google Ads services (play_services_ads_)
 - ✅ Internet 🤪
 
